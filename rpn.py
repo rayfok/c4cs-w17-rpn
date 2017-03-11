@@ -2,26 +2,33 @@
 
 import operator
 
-ops = {
+OPERATORS = {
 	'+': operator.add,
-	'-': operator.sub
+	'-': operator.sub,
+	'*': operator.mul,
+	'/': operator.truediv,
 }
 
-def calculate(arg):
-	stack = arg.split()
-	command = stack.pop()
-	try:
-		arg2 = float(stack.pop())
-		arg1 = float(stack.pop())
-		stack.append(ops[command](arg1, arg2))
-	except ValueError:
-		stack.append(float(command))
 
+def calculate(arg):
+	stack = list()
+	for operand in arg.split():
+		try:
+			operand = float(operand)
+			stack.append(operand)
+		except:
+			arg2 = stack.pop()
+			arg1 = stack.pop()
+			operator_fn = OPERATORS[operand]
+			result = operator_fn(arg1, arg2)
+			
+			stack.append(result)
 	return stack.pop()
 
 def main():
 	while True:
-		calculate(input("rpn calc> "))
+		result = calculate(input('rpn calc> '))
+		print("Result:", result)
 
 if __name__ == '__main__':
 	main()
